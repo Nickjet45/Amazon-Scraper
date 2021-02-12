@@ -12,7 +12,7 @@ def Send_Email(email, subject_msg, body_msg):
 
         print('Logining in to server')
 
-        server.login("python3autobot@gmail.com", 'wptftnsjzmsvrqrz')
+        server.login("Email@gmail.com", 'Password')
 
         print("Successfully logged in")
 
@@ -20,7 +20,7 @@ def Send_Email(email, subject_msg, body_msg):
         body = body_msg
         msg = f'subject: {subject} \n \n {body}'
 
-        server.sendmail('python3autobot@gmail.com', 
+        server.sendmail('Email@gmail.com', 
         email, 
         msg)
 
