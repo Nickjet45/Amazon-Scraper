@@ -6,4 +6,4 @@ Project: Amazon Web Scraper
             and if it's on sale
             If the product falls below some value, email the user to tell them the product is on sale
     
-    Status: Finished, but due to Amazon HTML-update (again) the project does properly function. Will be reworked entirely sometime in the future.
+    Status: Finished
