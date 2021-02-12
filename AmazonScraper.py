@@ -1,12 +1,15 @@
 from bs4 import BeautifulSoup
-import requests
+
 import time
+
 from sqlite3 import Error
 import sqlite3
+
 from datetime import datetime
 
 from Mail import Send_Email
 
+from msedge.selenium_tools import Edge, EdgeOptions
 #Email check written as function to loop through for invalid responses
 
 def Valid_Email(email):
@@ -19,14 +22,10 @@ def Valid_Email(email):
         user_email = input("Invalid response, please enter Y or N: ")
         Valid_Email(user_email)
 
-#Prompts for all data needed and checking for invalid email responses
-
-URL = input('What is the URL of the item? ')
-given_price = int(input('What price would you like to be notified at, rounded to the nearest dollar? '))
-user_email = input('Would you like to be emailed at your desired price?[Y/N] ')
-Valid_Email(user_email)
-
 #Beginning of rework
+def extract_Amazon_information(URL):
+    
+
 
 #Creation of a database to store all excess data
 
@@ -62,4 +61,12 @@ def main():
         print("Added data to Amazon_Storage table")
 
 
-Price_Track(URL, given_price, user_email)
+if __name__ == "__main__":
+
+    #Prompts for all data needed and checking for invalid email responses
+
+    URL = input('What is the URL of the item? ')
+    given_price = int(input('What price would you like to be notified at, rounded to the nearest dollar? '))
+    user_email = input('Would you like to be emailed at your desired price?[Y/N] ')
+    Valid_Email(user_email)
+
