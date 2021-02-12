@@ -26,94 +26,7 @@ given_price = int(input('What price would you like to be notified at, rounded to
 user_email = input('Would you like to be emailed at your desired price?[Y/N] ')
 Valid_Email(user_email)
 
-#User-Agent along with starting assumptions about the product to allow for easier data formatting
-
-headers = {"User-Agent": 'Enter User-Agent'}
-on_sale = False
-
-#Function to track Amazon Prices, does not include email due to it being optional
-
-def Price_Track(URL, desired_price, given_email):
-
-    global product_title
-    global price
-    global on_sale
-
-    #Requesting the HTML of the page of the URL
-
-    page = requests.get(URL, headers=headers)
-    soup = BeautifulSoup(page.content, 'lxml')
-
-    #Parsing through the HTML to find given id tags that correlate to the named variables
-
-    product_title = soup.find(id="productTitle").get_text().strip()
-
-    #Checks multiple price tags, due to Amazon changing them between the 3
-
-    try:
-        current_price = soup.find(id="priceblock_ourprice").get_text()
-    except AttributeError:
-        try:
-            current_price = soup.find(id="priceblock_dealprice").get_text()
-        except AttributeError:
-            try:
-                current_price = soup.find(id="priceblock_saleprice").get_text()
-                on_sale = True
-            except AttributeError:
-                current_price = None
-    
-    #Method to check to see if the item is on sale
-
-    try:
-        original_price = soup.find(class_="priceBlockStrikePriceString a-text-strike")
-        if original_price is None:
-            original_price = current_price
-            on_sale = False
-        else:
-            original_price = soup.find(class_="priceBlockStrikePriceString a-text-strike").get_text()
-            on_sale = True
-    except Exception as e:
-        print(e)
-    
-    #Changing the prices to a float value
-    if current_price is not None:
-        price = float(current_price[1:6])
-        orig_price = float(original_price[2:4])
-    else:
-        price = None
-        orig_price = None
-
-    #Calculating the sale percentage, if it's on sale
-
-    if on_sale is True:
-        sale_percentage = ((price - float(current_price[2:6]))/float(original_price[2:6])) * 100
-    else:
-        sale_percentage = 0
-
-    #Notification of user of the current price
-
-    while price > desired_price:
-        if not on_sale:
-            print("{} is currently not on sale. Current price of the item is: ${}".format(product_title, price))
-        else:
-            print("{} is currently on sale, but it is above your desired price. \n Current Price of item is: ${}".format(product_title, price))
-        main()
-        print('Going to sleep')
-
-        time.sleep(10800)
-        print("Sleep is 50% complete")
-        
-        time.sleep(10800)
-        print('Waking up....')
-    
-    if price <= desired_price:
-        if user_email is None:
-            print("{} is on sale! Original Price: ${} \n Current Price: ${} \n Sale Percentage: {}%".format(product_title, orig_price, price, sale_percentage))
-            main()
-        else:
-            print("{} is on sale! Original Price: ${} \n Current Price: ${} \n Sale Percentage: {}%".format(product_title, orig_price, price, sale_percentage))
-            Send_Email(given_price, "{} has gone on sale! It is currently at ${}, with an original price of ${}. Making the sale percentage {}%".format(product_title, price, orig_price, sale_percentage), URL)
-            main()
+#Beginning of rework
 
 #Creation of a database to store all excess data
 
@@ -137,7 +50,7 @@ def create_task(conn, task):
     return cur.lastrowid
 
 def main():
-    database = r"Path to local database"
+    database = r"C:\Users\Nick\Desktop\Programming\Python\Database\Storage.db"
 
     conn = create_connection(database)
     with conn:
