@@ -49,7 +49,7 @@ def create_task(conn, task):
     return cur.lastrowid
 
 def main():
-    database = r"C:\Users\Nick\Desktop\Programming\Python\Database\Storage.db"
+    database = r"SQLITE Database path"
 
     conn = create_connection(database)
     with conn:
