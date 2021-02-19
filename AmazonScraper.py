@@ -3,7 +3,7 @@ import time
 from sqlite3 import Error
 import sqlite3
 
-from datetime import datetime
+import datetime
 
 from Mail import Send_Email
 
@@ -120,7 +120,7 @@ def main(product_title, price, sale):
     unix = time.time()
     with conn:
         #Since a product's price can be changed even without going on sale, it's good to store it in the db
-        Data = (unix, str(datetime.datetime.fromtimestamp(unix).strftime(' %Y-%m-%d %H: %M: %S '), product_title, price, str(sale)))
+        Data = (unix, str(datetime.datetime.fromtimestamp(unix).strftime(' %Y-%m-%d %H: %M: %S ')), product_title, price, str(sale))
 
         create_task(conn, Data)
         print("Added data to Amazon_Storage table")
