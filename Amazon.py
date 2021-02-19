@@ -35,11 +35,12 @@ class Amazon():
 
         #Determines whether the product is currently on sale and if it is create a new element in the dictionary for Sale Price
         try:
-            price = self.soup.find('span', 'priceBlockStrikePriceString a-text-strike').text.strip()
+            price = self.__soup.find('span', 'priceBlockStrikePriceString a-text-strike').text
 
-            self.productInformation['SalePrice'].append(price)
+            self.productInformation['SalePrice'] = price
 
             self.productInformation['Sale'] = True
+
         #If the above code throws an exception, than the product is currently not on sale
         except AttributeError:
             self.productInformation['Sale'] = False
@@ -55,13 +56,13 @@ class Amazon():
             if("SalePrice" in self.productInformation):
                 #If the current key being evulated is Price, then change the output to "Original Price"
                 if(k == "Price"):
-                    print("Original Price: " + v)
+                    print("Current Price: " + v)
                 
                 elif(k== "Sale"):
                     print("On Sale: " + str(v))
                 
                 elif(k == "SalePrice"):
-                    print("Current Price: " + v)
+                    print("Original Price: " + v)
                 else:
                     print(k + ": " + v)
 
