@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 import time
 
 from sqlite3 import Error
@@ -9,7 +7,12 @@ from datetime import datetime
 
 from Mail import Send_Email
 
-from msedge.selenium_tools import Edge, EdgeOptions
+from Amazon import Amazon
+
+#TODO: Do a better job on filtering sale prices from current price
+#TODO: Readd infinite loop until the price has gone on sale
+#TODO: Reimplement other functions while keeping code optimizes
+#TODO: Readd notification of when product goes on sale
 
 #Collects the user information such as email, URL of the item they wish to track, and the price that they wish to be notified at
 def collect_Information():
@@ -34,57 +37,32 @@ def Desires_Email():
     
     return user_email
 
-def notify_user(current_price, on_sale, user_choice, product_title, product_URL):
+#def notify_user(current_price, on_sale, user_choice, product_title, product_URL):
     #If the current press is less than or equal to the user's desired price, choose how to notify the user
-    if(on_sale):
+    #if(on_sale):
         #If the user inputted an email, than email them, else log to console the fallen price
-        if(user_choice is not None):
-            Send_Email(user_choice, "{} is on sale".format(product_title), "The item you have wished for us to track has gone on sale to a price of: ${}, buy it at: {}".format(current_price, product_URL))
-        else:
-            print("The item you have tracked is currently on sale for a price of {}, buy it at: {}".format(current_price, product_URL))
+       # if(user_choice is not None):
+        #    Send_Email(user_choice, "{} is on sale".format(product_title), "The item you have wished for us to track has gone on sale to a price of: ${}, buy it at: {}".format(current_price, product_URL))
+        #else:
+            #print("The item you have tracked is currently on sale for a price of {}, buy it at: {}".format(current_price, product_URL))
 
 
 def main_extract(URL, desired_price, user_choice):
 
-    #Turning on the selenium driver
-    options = EdgeOptions()
-    options.use_chromium = True
+    #Creation of an Amazon object
+    product = Amazon(URL)
 
-    driver = Edge(options=options)
+    #Collects the product's information and stores it into the object
+    product.collectInformation()
 
-    driver.get(URL)
-
-    #Sets soup equal to the html content of the page based off of the URL entered by the user
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-
-    #Stores the result in a tuple called result
-    result = extract_Amazon_information(soup)
-
+    #Output of product's information
+    product.toString()
+    
     #After finding the individual element of each item, call main
-    main(result[0], result[1], result[2])
+    main(product.productInformation['Title'], product.productInformation['Price'], product.productInformation['Sale'])
 
     #After adding the results to the console, email the user if they specified for an email else log in the console if the product is on sale
-    notify_user(result[1], result[2], user_choice, result[0], URL)
-
-def extract_Amazon_information(soup):
-
-    #The price of the item is equal to the value located at this specific html tag
-    current_price = soup.find('span', 'a-size-medium a-color-price priceBlockBuyingPriceString').text
-
-    #The title of the product is the value located at this specific html tag
-    title = soup.find('span', 'a-size-large product-title-word-break').text
-
-    #Try to find the original price of the item, if it an attributeError is thrown, than it does not exist and the product is not on sale. Else it does exist, and the product is on sale
-    try:
-        current_price = soup.find('span', 'priceBlockStrikePriceString a-text-strike').text
-        on_sale = True
-    except AttributeError:
-        on_sale = False
-
-    results = (title, current_price, on_sale)
-
-    return results
-
+    #notify_user(result[1], result[2], user_choice, result[0], URL)
 
 #Creation of a database to store all excess data
 
@@ -108,7 +86,7 @@ def create_task(conn, task):
     return cur.lastrowid
 
 def main(product_title, price, on_sale):
-    database = r"Database path"
+    database = r"C:\Users\Nick\Desktop\Programming\Python\Database\Storage.db"
 
     conn = create_connection(database)
     with conn:
