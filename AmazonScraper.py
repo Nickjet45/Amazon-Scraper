@@ -30,13 +30,15 @@ def collect_Information():
 
     user_email = Desires_Email()
 
+    repeat_desire = input("Would you like to loop until the product is on sale? [Y/y] anything else is no? ").upper()
+
     #Returns a tuple of information for the program to use as needed
 
-    return (URL, desired_price, user_email)
+    return (URL, desired_price, user_email, repeat_desire)
 
 #Ask the user if they would like to be emailed, if yes ask them for their email, else move along in the program
 def Desires_Email():
-    userChoice = input("Would you like to be emailed? [y\Y] ")
+    userChoice = input("Would you like to be emailed? [Y/N] ")
 
     if(userChoice == 'y' or userChoice == 'Y'):
         user_email = input("What is your email? ")
@@ -95,7 +97,7 @@ def graph_data(conn):
 
     plt.show()
 
-def main_extract(URL, desired_price, user_choice):
+def main_extract(URL, desired_price, user_choice, loopDesire):
 
     #Creation of an Amazon object
     product = Amazon(URL)
@@ -111,6 +113,8 @@ def main_extract(URL, desired_price, user_choice):
 
     #After adding the results to the console, email the user if they specified for an email else log in the console if the product is on sale
     #notify_user(result[1], result[2], user_choice, result[0], URL)
+    if(loopDesire == "Y"):
+        loopFunction(URL, desired_price, user_choice)
 
 def main(product_title, price, sale):
     database = r"Storage.db"
@@ -125,10 +129,19 @@ def main(product_title, price, sale):
         create_task(conn, Data)
         print("Added data to Amazon_Storage table")
 
+def loopFunction(URL, desired_price, user_choice):
+    #Sleeps for a day, and then reruns main
+    time.sleep(43200)
+    print("Sleep half done")
+    time.sleep(43200)
+    print("Rechecking product's information")
+
+    main_extract(URL, desired_price, user_choice, "Y")
+
 if __name__ == "__main__":
 
     #Prompts for all data needed and checking for invalid email responses
     information = collect_Information()
 
-    main_extract(information[0], information[1], information[2])
+    main_extract(information[0], information[1], information[2], information[3])
 

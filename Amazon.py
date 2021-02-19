@@ -44,6 +44,9 @@ class Amazon():
         except AttributeError:
             self.productInformation['Sale'] = False
 
+        #After collecting information, close the driver
+        self.__EdgeClose()
+
     #Method to neatly output the user informaton
     def toString(self):
         #Loops over the dictionary to allow nice output
@@ -81,6 +84,9 @@ class Amazon():
 
         #Stores the html content of the URL within the private instance variable named soup
         self.__soup = BeautifulSoup(self.__driver.page_source, 'html.parser')
+    
+    def __EdgeClose(self):
+        self.__driver.quit()
 
 
     #Private method of class Amazon, as the user does not need to worry about Selenium driver for Edge
