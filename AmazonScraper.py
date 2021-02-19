@@ -78,22 +78,23 @@ def create_connection(db_file):
     return conn
 
 def create_task(conn, task):
-    sql = ''' INSERT INTO Amazon_Storage(Title, Price, Date, Sale) VALUES(?,?,?,?)'''
+    sql = 'INSERT INTO AmazonData(unix, datestamp, title, price) VALUES (?, ?, ?, ?)'
 
     cur = conn.cursor()
     cur.execute(sql, task)
 
     return cur.lastrowid
 
-def main(product_title, price, on_sale):
-    database = r"C:\Users\Nick\Desktop\Programming\Python\Database\Storage.db"
+def main(product_title, price, sale):
+    database = r"Storage.db"
 
     conn = create_connection(database)
+
+    unix = time.time()
     with conn:
-        if on_sale:
-            Data = (product_title, price, str(datetime.date(datetime.now())), 'True')
-        else:
-            Data = (product_title, price, str(datetime.date(datetime.now())), 'False')
+        #Since a product's price can be changed even without going on sale, it's good to store it in the db
+        Data = (unix, str(datetime.datetime.fromtimestamp(unix).strftime(' %Y-%m-%d %H: %M: %S '), product_title, price, str(sale)))
+        
         create_task(conn, Data)
         print("Added data to Amazon_Storage table")
 
