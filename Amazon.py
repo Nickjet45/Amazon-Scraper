@@ -13,7 +13,7 @@ class Amazon():
     #Collects the product's information and stores it into an instance variable of type dictionary
     def collectInformation(self):
         #Creates a dictionary to store the product's information, initalzing each value to an empty string, -1, or false
-        self.productInformation = {"Title": "", "Price": "", "Sale": False}
+        self.productInformation = {"Title": "", "Price": "","Rating": "","Reviews": "", "Sale": False}
 
         #Initializes the private soup variable
         self.__SoupStartup()
@@ -25,6 +25,13 @@ class Amazon():
 
         #Finds the product's current price and stores it within the dictionary
         self.productInformation['Price'] = self.__soup.find('span', 'a-size-medium a-color-price priceBlockBuyingPriceString').text.strip()
+
+        #Retrieves the current star rating and adds it to the dictionary
+        self.productInformation['Rating'] = self.__soup.find('span', 'a-icon-alt').text.strip()
+
+        #Retrieves the number of reviews and adds it to the dictionary
+
+        self.productInformation['Reviews'] = self.__soup.find('span', {"class": 'a-size-base', "id": "acrCustomerReviewText"}).text
 
         #Determines whether the product is currently on sale and if it is create a new element in the dictionary for Sale Price
         try:
