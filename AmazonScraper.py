@@ -86,7 +86,7 @@ def create_task(conn, task):
     return cur.lastrowid
 
 def main(product_title, price, on_sale):
-    database = r"C:\Users\Nick\Desktop\Programming\Python\Database\Storage.db"
+    database = r"Database Path"
 
     conn = create_connection(database)
     with conn:
