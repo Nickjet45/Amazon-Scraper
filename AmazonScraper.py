@@ -9,6 +9,14 @@ from Mail import Send_Email
 
 from Amazon import Amazon
 
+import matplotlib.pyplot as plt
+
+import matplotlib.dates as mdates
+
+from matplotlib import style
+
+style.use('fivethirtyeight')
+
 #TODO: Do a better job on filtering sale prices from current price
 #TODO: Readd infinite loop until the price has gone on sale
 #TODO: Reimplement other functions while keeping code optimizes
@@ -46,6 +54,46 @@ def Desires_Email():
         #else:
             #print("The item you have tracked is currently on sale for a price of {}, buy it at: {}".format(current_price, product_URL))
 
+#Creation of a database to store all excess data
+
+def create_connection(db_file):
+
+    conn = None
+
+    try:
+        conn = sqlite3.connect(db_file)
+    except Error as e:
+        print(e)
+    
+    return conn
+
+def create_task(conn, task):
+    sql = 'INSERT INTO AmazonData(unix, datestamp, title, price, sale) VALUES (?, ?, ?, ?, ?)'
+
+    cur = conn.cursor()
+    cur.execute(sql, task)
+
+    return cur.lastrowid
+
+#Graphs the data from the database, with the connection to the database being passed through the function
+def graph_data(conn):
+    c = conn.cursor()
+
+    c.execute('SELECT unix, price FROM AmazonData')
+
+    dates = []
+    values = []
+
+    #Loops over the values retrieved and stores them into the database as the data is read in
+    for row in c.fetchall():
+        dates.append(datetime.datetime.fromtimestamp(row[0]))
+        
+        values.append(row[1])
+    
+    #After all the data is read in, create a line graph and than show it
+    plt.plot_date(dates, values, '-')
+
+    plt.show()
 
 def main_extract(URL, desired_price, user_choice):
 
@@ -64,27 +112,6 @@ def main_extract(URL, desired_price, user_choice):
     #After adding the results to the console, email the user if they specified for an email else log in the console if the product is on sale
     #notify_user(result[1], result[2], user_choice, result[0], URL)
 
-#Creation of a database to store all excess data
-
-def create_connection(db_file):
-
-    conn = None
-
-    try:
-        conn = sqlite3.connect(db_file)
-    except Error as e:
-        print(e)
-    
-    return conn
-
-def create_task(conn, task):
-    sql = 'INSERT INTO AmazonData(unix, datestamp, title, price) VALUES (?, ?, ?, ?)'
-
-    cur = conn.cursor()
-    cur.execute(sql, task)
-
-    return cur.lastrowid
-
 def main(product_title, price, sale):
     database = r"Storage.db"
 
@@ -94,10 +121,9 @@ def main(product_title, price, sale):
     with conn:
         #Since a product's price can be changed even without going on sale, it's good to store it in the db
         Data = (unix, str(datetime.datetime.fromtimestamp(unix).strftime(' %Y-%m-%d %H: %M: %S '), product_title, price, str(sale)))
-        
+
         create_task(conn, Data)
         print("Added data to Amazon_Storage table")
-
 
 if __name__ == "__main__":
 
