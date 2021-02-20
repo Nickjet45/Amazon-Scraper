@@ -109,11 +109,11 @@ def main_extract(URL, desired_price, user_choice, loopDesire):
     product.toString()
     
     #After finding the individual element of each item, call main
-    main(product.productInformation['Title'], product.productInformation['Price'], product.productInformation['Sale'])
+    main(product.title, product.current_price, product.sale_status)
 
     #After adding the results to the console, email the user if they specified for an email else log in the console if the product is on sale
     #notify_user(result[1], result[2], user_choice, result[0], URL)
-    if(loopDesire == "Y" and product.productInformation['Sale'] is False):
+    if(loopDesire == "Y" and product.sale_status is False):
         loopFunction(URL, desired_price, user_choice)
 
 def main(product_title, price, sale):

@@ -12,71 +12,75 @@ class Amazon():
     
     #Collects the product's information and stores it into an instance variable of type dictionary
     def collectInformation(self):
-        #Creates a dictionary to store the product's information, initalzing each value to an empty string, -1, or false
-        self.productInformation = {"Title": "", "Price": "","Rating": "","Reviews": "", "Sale": False}
-
         #Initializes the private soup variable
         self.__SoupStartup()
 
         #Retrieves each individual item by parsing through the html, and assigns the item to a specific index of the tuple productInformation
 
-        #Finds the product's Title and stores it into the dictionary
-        self.productInformation['Title']= self.__soup.find('span', 'a-size-large product-title-word-break').text.strip()
+        #Finds the product's Title and stores it into a corresponding instance variable
+        self.title = self.__soup.find('span', 'a-size-large product-title-word-break').text.strip()
 
-        #Finds the product's current price and stores it within the dictionary
-        self.productInformation['Price'] = self.__soup.find('span', 'a-size-medium a-color-price priceBlockBuyingPriceString').text.strip()
+        #Finds the product's current price and stores it into a corresponding instance variable
+        self.current_price = self.__soup.find('span', 'a-size-medium a-color-price priceBlockBuyingPriceString').text.strip()
 
-        #Retrieves the current star rating and adds it to the dictionary
-        self.productInformation['Rating'] = self.__soup.find('span', 'a-icon-alt').text.strip()
+        #Retrieves the current star rating and adds it into a corresponding instance variable
+        self.rating = self.__soup.find('span', 'a-icon-alt').text.strip()
 
-        #Retrieves the number of reviews and adds it to the dictionary
+        #Retrieves the number of reviews and adds it into a corresponding instance variable
 
-        self.productInformation['Reviews'] = self.__soup.find('span', {"class": 'a-size-base', "id": "acrCustomerReviewText"}).text
+        self.review_count = self.__soup.find('span', {"class": 'a-size-base', "id": "acrCustomerReviewText"}).text
 
         #Determines whether the product is currently on sale and if it is create a new element in the dictionary for Sale Price
         try:
             price = self.__soup.find('span', 'priceBlockStrikePriceString a-text-strike').text
 
-            self.productInformation['SalePrice'] = price
+            self.sale_price = price
 
-            self.productInformation['Sale'] = True
+            self.sale_status = True
 
         #If the above code throws an exception, than the product is currently not on sale
         except AttributeError:
-            self.productInformation['Sale'] = False
+            self.sale_status = False
 
         #After collecting information, close the driver
         self.__EdgeClose()
 
     #Method to neatly output the user informaton
     def toString(self):
-        #Loops over the dictionary to allow nice output
-        for k, v in self.productInformation.items():
-            #If the key SalePrice exists in the dictionary, than the product is on sale and the output needs to be changed
-            if("SalePrice" in self.productInformation):
-                #If the current key being evulated is Price, then change the output to "Original Price"
-                if(k == "Price"):
-                    print("Current Price: " + v)
-                
-                elif(k== "Sale"):
-                    print("On Sale: " + str(v))
-                
-                elif(k == "SalePrice"):
-                    print("Original Price: " + v)
-                else:
-                    print(k + ": " + v)
+        
+        #If the item is on sale, use X output format, else use Y output
 
-            #Else the product is not on sale and use this print format
-            else:
-                #If the current key is Price, change the output to "Current Price: " v, and if it's sale change it to "On Sale: " v, else leave it as it is
-                if(k == "Price"):
-                    print("Current Price: " + v)
+        if self.sale_status:
+            #Prints the title of the product
+            print("Product: " + self.title)
 
-                elif(k == "Sale"):
-                    print("On Sale: "+ str(v))
+            #Prints that the product is currently on sale
+            print("On Sale: " + self.sale_status)
 
-                else:
-                    print(k + ": " + v)
+            #Prints the current price of the product, followed by it's original price
+            print("Current price: " + self.current_price)
+
+            print("Original price: " + self.sale_price) 
+
+            #Print the review count followed by the star rating
+            print("Review Count: " + self.review_count)
+
+            print("Rating: " + self.rating)
+        
+        else:
+                        #Prints the title of the product
+            print("Product: " + self.title)
+
+            #Prints that the product is currently on sale
+            print("On Sale: " + self.sale_status)
+
+            #Prints the current price of the product
+            print("Current price: " + self.current_price)
+
+            #Print the review count followed by the star rating
+            print("Review Count: " + self.review_count)
+
+            print("Rating: " + self.rating)
 
     #Private instance method for class Amazon, as end user does not need to worry about retrieval of html content
     def __SoupStartup(self):
