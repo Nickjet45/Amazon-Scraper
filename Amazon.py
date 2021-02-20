@@ -55,7 +55,7 @@ class Amazon():
             print("Product: " + self.title)
 
             #Prints that the product is currently on sale
-            print("On Sale: " + self.sale_status)
+            print("On Sale: " + str(self.sale_status))
 
             #Prints the current price of the product, followed by it's original price
             print("Current price: " + self.current_price)
@@ -72,7 +72,7 @@ class Amazon():
             print("Product: " + self.title)
 
             #Prints that the product is currently on sale
-            print("On Sale: " + self.sale_status)
+            print("On Sale: " + str(self.sale_status))
 
             #Prints the current price of the product
             print("Current price: " + self.current_price)
