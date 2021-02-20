@@ -113,7 +113,7 @@ def main_extract(URL, desired_price, user_choice, loopDesire):
 
     #After adding the results to the console, email the user if they specified for an email else log in the console if the product is on sale
     #notify_user(result[1], result[2], user_choice, result[0], URL)
-    if(loopDesire == "Y"):
+    if(loopDesire == "Y" and product.productInformation['Sale'] is False):
         loopFunction(URL, desired_price, user_choice)
 
 def main(product_title, price, sale):
@@ -127,7 +127,7 @@ def main(product_title, price, sale):
         Data = (unix, str(datetime.datetime.fromtimestamp(unix).strftime(' %Y-%m-%d %H: %M: %S ')), product_title, price, str(sale))
 
         create_task(conn, Data)
-        print("Added data to Amazon_Storage table")
+        print("Added data to Database")
 
 def loopFunction(URL, desired_price, user_choice):
     #Sleeps for a day, and then reruns main
