@@ -6,9 +6,10 @@ from msedge.selenium_tools import Edge, EdgeOptions
 #TODO: Try and optimize time it takes to retrieve informaton(possibly change to simply use requests)
 
 class Amazon():
-    #Initalizes the object to only have an instance variable for URL
-    def __init__(self, URL):
+    #Initalizes the object to require the URL of the item and the user's preferred browser 
+    def __init__(self, URL, browser):
         self.URL = URL
+        self.browser = browser
     
     #Collects the product's information and stores it into an instance variable of type dictionary
     def collectInformation(self):
@@ -84,8 +85,15 @@ class Amazon():
 
     #Private instance method for class Amazon, as end user does not need to worry about retrieval of html content
     def __SoupStartup(self):
-        #Starts up Selenium Driver
-        self.__seleniumDriverStartup()
+        #Starts up Selenium Driver based off of the user's browser
+        if(self.browser is 'Edge'):
+            self.__EdgeStartup()
+        
+        elif(self.browser is 'Chrome'):
+            pass
+            
+        elif(self.browser is 'FireFox'):
+            pass
 
         #Stores the html content of the URL within the private instance variable named soup
         self.__soup = BeautifulSoup(self.__driver.page_source, 'html.parser')
@@ -95,7 +103,7 @@ class Amazon():
 
 
     #Private method of class Amazon, as the user does not need to worry about Selenium driver for Edge
-    def __seleniumDriverStartup(self):
+    def __EdgeStartup(self):
         options = EdgeOptions()
         options.use_chromium = True
 

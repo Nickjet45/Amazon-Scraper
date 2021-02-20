@@ -98,7 +98,7 @@ def graph_data(conn):
 def main_extract(URL, desired_price, user_choice, loopDesire):
 
     #Creation of an Amazon object
-    product = Amazon(URL)
+    product = Amazon(URL, 'Edge')
 
     #Collects the product's information and stores it into the object
     product.collectInformation()
