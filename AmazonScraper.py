@@ -131,6 +131,7 @@ def main(product_title, price, sale):
 
 def loopFunction(URL, desired_price, user_choice):
     #Sleeps for a day, and then reruns main
+    print("Going to sleep")
     time.sleep(43200)
     print("Sleep half done")
     time.sleep(43200)
