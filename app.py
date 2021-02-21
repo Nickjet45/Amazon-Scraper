@@ -79,7 +79,8 @@ def create_task(conn, task):
 def graph_data(conn):
     c = conn.cursor()
 
-    c.execute('SELECT unix, price FROM AmazonData')
+    #Make sure to limit the select statement to a specific product
+    c.execute('SELECT unix, price, title FROM AmazonData')
 
     dates = []
     values = []
@@ -126,6 +127,7 @@ def main(product_title, price, sale):
 
         create_task(conn, Data)
         print("Added data to Database")
+    graph_data(conn)
 
 def loopFunction(URL, desired_price, user_choice):
     #Sleeps for a day, and then reruns main
