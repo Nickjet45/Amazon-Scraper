@@ -92,7 +92,7 @@ class Amazon():
             self.__EdgeStartup()
         
         elif(self.browser is 'Chrome'):
-            #self.__ChromeStartup()
+            self.__ChromeStartup()
             pass
 
         #Stores the html content of the URL within the private instance variable named soup
