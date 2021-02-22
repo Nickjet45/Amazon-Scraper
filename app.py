@@ -127,7 +127,7 @@ def main(product_title, price, sale):
 
         create_task(conn, Data)
         print("Added data to Database")
-    graph_data(conn)
+   # graph_data(conn)
 
 def loopFunction(URL, desired_price, user_choice):
     #Sleeps for a day, and then reruns main

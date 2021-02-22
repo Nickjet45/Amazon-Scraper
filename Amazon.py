@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 
-from msedge.selenium_tools import Edge, EdgeOptions
+from msedge.selenium_tools import Edge, EdgeOptions, webdriver
+
+from selenium import webdriver
 
 #TODO: add support for other browsers, Ex. Chrome, FireFox, etc. 
 #TODO: Try and optimize time it takes to retrieve informaton(possibly change to simply use requests)
@@ -90,9 +92,7 @@ class Amazon():
             self.__EdgeStartup()
         
         elif(self.browser is 'Chrome'):
-            pass
-            
-        elif(self.browser is 'FireFox'):
+            #self.__ChromeStartup()
             pass
 
         #Stores the html content of the URL within the private instance variable named soup
@@ -110,3 +110,9 @@ class Amazon():
         self.__driver = Edge(options=options)
 
         self.__driver.get(self.URL)
+    
+    def __ChromeStartup(self):
+        driver = webdriver.Chrome()
+        driver.get(self.URL)
+
+        pass
