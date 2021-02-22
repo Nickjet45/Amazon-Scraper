@@ -114,5 +114,3 @@ class Amazon():
     def __ChromeStartup(self):
         driver = webdriver.Chrome()
         driver.get(self.URL)
-
-        pass
