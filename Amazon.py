@@ -9,7 +9,8 @@ from selenium import webdriver
 
 class Amazon():
     #Initalizes the object to require the URL of the item and the user's preferred browser 
-    def __init__(self, URL, browser):
+    #Defaults to using Microsoft Edge
+    def __init__(self, URL, browser='Edge'):
         self.URL = URL
         self.browser = browser
     

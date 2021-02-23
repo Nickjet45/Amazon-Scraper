@@ -76,11 +76,12 @@ def create_task(conn, task):
     return cur.lastrowid
 
 #Graphs the data from the database, with the connection to the database being passed through the function
-def graph_data(conn):
+def graph_data(conn, title):
     c = conn.cursor()
 
     #Make sure to limit the select statement to a specific product
-    c.execute('SELECT unix, price, title FROM AmazonData')
+    sql = 'SELECT unix, price FROM AmazonData WHERE title = "{}"'.format(title)
+    c.execute(sql)
 
     dates = []
     values = []
@@ -93,7 +94,7 @@ def graph_data(conn):
     
     #After all the data is read in, create a line graph and than show it
     plt.plot_date(dates, values, '-')
-
+    plt.title(title)
     plt.show()
 
 def main_extract(URL, desired_price, user_choice, loopDesire):
@@ -127,7 +128,7 @@ def main(product_title, price, sale):
 
         create_task(conn, Data)
         print("Added data to Database")
-   # graph_data(conn)
+    #graph_data(conn, product_title)
 
 def loopFunction(URL, desired_price, user_choice):
     #Sleeps for a day, and then reruns main
