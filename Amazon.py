@@ -28,8 +28,14 @@ class Amazon():
         self.current_price = self.__soup.find('span', 'a-size-medium a-color-price priceBlockBuyingPriceString').text.strip()
 
         #Retrieves the current star rating and adds it into a corresponding instance variable
-        #TODO Fix bug where rating is sometimes retrieved as "Previous page"
-        self.rating = self.__soup.find('span', 'a-icon-alt').text.strip()
+
+        #Checks to see if the rating is "Previous page", if so than the rating has a separate tag that needs to be found
+        try:
+            motherTag = self.__soup.find('i', 'a-icon a-icon-star a-star-4-5')
+            self.rating = motherTag.find('span', 'a-icon-alt').text.strip()
+        #if a attribute error is thrown, than the rating is stored within this regular tag and should be used
+        except AttributeError:
+            self.rating = self.__soup.find('span', 'a-icon-alt').text.strip()
 
         #Retrieves the number of reviews and adds it into a corresponding instance variable
 
